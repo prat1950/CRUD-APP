@@ -1,2 +1,4 @@
 # CRUD-APP
-Employee-CRUD
+Employee-CRUD built with a:
+django and postgres backend and a ReactJS front-end
+
