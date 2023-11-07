@@ -1,0 +1,14 @@
+
+<h1>Employee List</h1>
+<ul>
+    {% for employee in employees %}
+        <li>
+            Employee ID: {{ employee.employee_id }}<br>
+            Employee Code: {{ employee.employee_code }}<br>
+            <!-- Add other employee details as needed -->
+            <a href="{% url 'employee_delete' employee.pk %}">Delete</a>
+        </li>
+    {% empty %}
+        <li>No employees available.</li>
+    {% endfor %}
+</ul>
