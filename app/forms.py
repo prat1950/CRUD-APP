@@ -33,3 +33,14 @@ class EmployeeForm(forms.ModelForm):
         required=False,
         initial=Employee.BASIC
     )
+
+
+#form for updating:
+
+class EmployeeUpdateForm(forms.ModelForm):
+    class Meta:
+        model=Employee
+        fields = '__all__'
+        widgets = {
+            'dob': forms.DateInput(attrs={'type': 'date'}),
+        }

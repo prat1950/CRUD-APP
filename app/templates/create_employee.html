@@ -2,5 +2,8 @@
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Submit</button>
+    <button>
+      <a href="{% url 'employee_list' %}" class="btn" >Go to Employee Page</a>
+    </button>
   </form>
   

@@ -6,9 +6,17 @@
             Employee ID: {{ employee.employee_id }}<br>
             Employee Code: {{ employee.employee_code }}<br>
             <!-- Add other employee details as needed -->
-            <a href="{% url 'employee_delete' employee.pk %}">Delete</a>
+            <button>
+                <a href="{% url 'employee_delete' employee.pk %}">Delete</a>
+            </button>
+            <button>
+                <a href="{% url 'employee_update' employee.pk %}">Update</a>
+            </button>
         </li>
     {% empty %}
         <li>No employees available.</li>
     {% endfor %}
 </ul>
+<button>
+    <a href="{% url 'create_employee' %}" class="btn" type="submit">Go to Create Employee Page</a>
+</button>
