@@ -18,12 +18,22 @@ from django.contrib import admin
 from django.urls import path
 from app.views import create_employee
 from app import views
+from app.views import (
+    CreateEmployeeAPIView,
+    EmployeeListAPIView,
+    EmployeeDeleteAPIView,
+    EmployeeUpdateAPIView,
+)
 
 urlpatterns = [
     path('', create_employee, name='home'),
     path('admin/', admin.site.urls),
-    path('create_employee/', create_employee, name='create_employee'),
-    path('employees/<int:pk>/delete/', views.employee_delete, name='employee_delete'),
-    path('employees/', views.employee_list_view, name='employee_list'),
-    path('employees/<int:pk>/update/', views.employee_update, name='employee_update'),
+    # path('create_employee/', create_employee, name='create_employee'),
+    # path('employees/<int:pk>/delete/', views.employee_delete, name='employee_delete'),
+    # path('employees/', views.employee_list_view, name='employee_list'),
+    # path('employees/<int:pk>/update/', views.employee_update, name='employee_update'),
+    path('api/create_employee/', CreateEmployeeAPIView.as_view(), name='create_employee_api'),
+    path('api/employee_list/', EmployeeListAPIView.as_view(), name='employee_list_api'),
+    path('api/employee_delete/<int:pk>/', EmployeeDeleteAPIView.as_view(), name='employee_delete_api'),
+    path('api/employee_update/<int:pk>/', EmployeeUpdateAPIView.as_view(), name='employee_update_api'),
 ]
