@@ -3,11 +3,14 @@ from django.http import JsonResponse
 from .forms import EmployeeForm
 from django.shortcuts import get_object_or_404, redirect
 from .models import Employee
+from .models import ProgrammingLanguage
+from .models import Language
 from django.core import serializers
 from django.http import JsonResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from django.http import HttpResponse
 
 # def create_employee(request):
 #     if request.method == 'POST':
@@ -61,7 +64,25 @@ class EmployeeListAPIView(APIView):
     def get(self, request):
         employees = Employee.objects.all()
         serialized_data = serializers.serialize('json', employees)
-        return JsonResponse({'data': serialized_data})
+
+        # Retrieve choices directly from the Employee model
+        gender_choices = dict(Employee.GENDER_CHOICES)
+        programming_languages = list(dict(Employee.PROGRAMMING_LANGUAGES).keys())
+        languages = list(dict(Employee.LANGUAGES).keys())
+        skill_level_choices = dict(Employee.SKILL_LEVEL_CHOICES)
+
+        # Add choices to the response data
+        response_data = {
+            'data': serialized_data,
+            'choices': {
+                'gender_choices': gender_choices,
+                'programming_languages': programming_languages,
+                'languages': languages,
+                'skill_level_choices': skill_level_choices,
+            },
+        }
+
+        return JsonResponse(response_data)
 
 
 class EmployeeDeleteAPIView(APIView):
@@ -80,3 +101,24 @@ class EmployeeUpdateAPIView(APIView):
             return JsonResponse({'data': serialized_data})
         else:
             return JsonResponse({'error': 'Invalid form data'}, status=400)
+
+def index(request):
+    return HttpResponse("Hello, this is the root path.")
+
+
+
+
+def choices(request):
+    # Retrieve choices directly from the Employee model
+    gender_choices = list(Employee.GENDER_CHOICES)
+    programming_languages = list(Employee.PROGRAMMING_LANGUAGES)
+    languages = list(Employee.LANGUAGES)
+    skill_level_choices = list(Employee.SKILL_LEVEL_CHOICES)
+
+    # Return choices as JSON response
+    return JsonResponse({
+        'gender_choices': gender_choices,
+        'programming_languages': programming_languages,
+        'languages': languages,
+        'skill_level_choices': skill_level_choices,
+    })
