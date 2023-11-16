@@ -4,14 +4,14 @@ import { Button, TextField, Container, Grid, MenuItem, Select, InputLabel } from
 
 const CreateEmployee = () => {
   const [formData, setFormData] = useState({
-    employeeId: '',
-    employeeCode: '',
+    employee_id: '',
+    employee_code: '',
     dob: '',
     designation: '',
     gender: '',
-    languageSkillsLevel: '',
-    programmingSkills: [],
-    languageSkills: [],
+    language_skills_level: '',
+    programming_skills: [],
+    language_skills: [],
   });
   const [genderChoices, setGenderChoices] = useState([]);
   const [programmingLanguages, setProgrammingLanguages] = useState([]);
@@ -20,7 +20,17 @@ const CreateEmployee = () => {
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setFormData({ ...formData, [name]: value });
+  
+    // Check if the field is programming_skills or language_skills
+    if (name === "programming_skills" || name === "language_skills") {
+      // Convert the value to an array
+      const updatedValue = Array.isArray(value) ? value : [value];
+      // Update the formData state with the array value
+      setFormData({ ...formData, [name]: updatedValue });
+    } else {
+      // For other fields, update the formData state normally
+      setFormData({ ...formData, [name]: value });
+    }
   };
 
   useEffect(() => {
@@ -40,7 +50,13 @@ const CreateEmployee = () => {
   const handleSubmit = () => {
     // Send a POST request to your Django backend to create a new employee
     console.log(formData);
-    axios.post('http://localhost:8000/api/create_employee/', formData)
+    console.log(JSON.stringify(formData));
+
+    axios.post('http://localhost:8000/api/create_employee/', formData, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
       .then(response => {
         // Handle success, e.g., show a success message or redirect
         console.log('Employee created successfully:', response.data);
@@ -48,9 +64,10 @@ const CreateEmployee = () => {
       .catch(error => {
         // Handle error, e.g., show an error message
         console.error('Error creating employee:', error);
-        console.log('Error response:', error.response);
+        console.log('Error response:', error.response.data);
       });
   };
+  
 
   return (
     <Container>
@@ -59,8 +76,8 @@ const CreateEmployee = () => {
         <Grid item xs={12} sm={6}>
           <TextField
             label="Employee ID"
-            name="employeeId"
-            value={formData.employeeId}
+            name="employee_id"
+            value={formData.employee_id}
             onChange={handleChange}
             fullWidth
             style={{ color: 'white', borderColor: 'white' }}
@@ -98,8 +115,8 @@ const CreateEmployee = () => {
         <Grid item xs={12} sm={6}>
           <TextField
             label="Employee Code"
-            name="employeeCode"
-            value={formData.employeeCode}
+            name="employee_code"
+            value={formData.employee_code}
             onChange={handleChange}
             fullWidth
             InputProps={{
@@ -146,8 +163,8 @@ const CreateEmployee = () => {
           <InputLabel htmlFor="language-skills">Language Skills</InputLabel>
           <Select
             label="Language Skills"
-            name="languageSkills"
-            value={formData.languageSkills}
+            name="language_skills"
+            value={formData.language_skills}
             onChange={handleChange}
             fullWidth
             multiple
@@ -166,8 +183,8 @@ const CreateEmployee = () => {
           <InputLabel htmlFor="programming-skills">Programming Languages</InputLabel>
           <Select
             label="Programming Languages"
-            name="programmingSkills"
-            value={formData.programmingSkills}
+            name="programming_skills"
+            value={formData.programming_skills}
             onChange={handleChange}
             fullWidth
             multiple
@@ -185,8 +202,8 @@ const CreateEmployee = () => {
           <InputLabel htmlFor="language-skills-level">Language Skills Level</InputLabel>
           <Select
             label="Language Skills Level"
-            name="languageSkillsLevel"
-            value={formData.languageSkillsLevel}
+            name="language_skills_Level"
+            value={formData.language_skills_level}
             onChange={handleChange}
             fullWidth
             style={{ color: 'white', borderColor: 'white' }}
@@ -203,8 +220,8 @@ const CreateEmployee = () => {
           <InputLabel htmlFor="programming-skills-level">Programming Language Skills Level</InputLabel>
           <Select
             label="Programming Language Skills Level"
-            name="programmingSkillsLevel"
-            value={formData.programmingSkillsLevel}
+            name="programming_skills_level"
+            value={formData.programming_skills_level}
             onChange={handleChange}
             fullWidth
             style={{ color: 'white', borderColor: 'white' }}
