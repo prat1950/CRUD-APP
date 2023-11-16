@@ -11,8 +11,19 @@ import LanguageIcon from '@mui/icons-material/Language';
 const EmployeeList = () => {
   const [employees, setEmployees] = useState([]);
   const [choices, setChoices] = useState({});
+  const [fetchDataFlag, setFetchDataFlag] = useState(true);
+
+
+  
 
   useEffect(() => {
+    if (fetchDataFlag) {
+      fetchData();
+      setFetchDataFlag(false);
+    }
+  }, [fetchDataFlag]);
+
+  const fetchData = () => {
     axios.get('http://localhost:8000/api/employee_list/')
       .then(response => {
         const decodedData = JSON.parse(response.data.data);
@@ -20,7 +31,7 @@ const EmployeeList = () => {
         setChoices(response.data.choices);
       })
       .catch(error => console.error(error));
-  }, []);
+  };
 
   
 

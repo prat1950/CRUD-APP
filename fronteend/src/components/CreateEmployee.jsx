@@ -50,12 +50,12 @@ const CreateEmployee = () => {
   const handleSubmit = () => {
     // Send a POST request to your Django backend to create a new employee
     console.log(formData);
-    console.log(JSON.stringify(formData));
+  
 
     axios.post('http://localhost:8000/api/create_employee/', formData, {
       headers: {
-        'Content-Type': 'application/json',
-      },
+        'Content-Type': 'multipart/form-data'
+      }
     })
       .then(response => {
         // Handle success, e.g., show a success message or redirect
@@ -65,6 +65,8 @@ const CreateEmployee = () => {
         // Handle error, e.g., show an error message
         console.error('Error creating employee:', error);
         console.log('Error response:', error.response.data);
+        console.log(error.response.status);
+    console.log(error.response.headers);
       });
   };
   

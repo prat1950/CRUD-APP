@@ -5,12 +5,12 @@ from .models import Employee, ProgrammingLanguage, Language
 class LanguageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Language
-        fields = ['name']
+        fields = ["name"]
 
 class ProgrammingLanguageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProgrammingLanguage
-        fields = ['name']
+        fields = ["name"]
 
 class EmployeeSerializer(serializers.ModelSerializer):
     programming_skills = ProgrammingLanguageSerializer(many=True)
