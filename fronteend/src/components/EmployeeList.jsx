@@ -20,7 +20,9 @@ const EmployeeList = () => {
         setChoices(response.data.choices);
       })
       .catch(error => console.error(error));
-  }, [employees]);
+  }, []);
+
+  
 
   return (
     <Grid container spacing={2}>

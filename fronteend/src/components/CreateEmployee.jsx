@@ -4,7 +4,7 @@ import { Button, TextField, Container, Grid, MenuItem, Select, InputLabel } from
 
 const CreateEmployee = () => {
   const [formData, setFormData] = useState({
-    employeeID:'',
+    employeeId: '',
     employeeCode: '',
     dob: '',
     designation: '',
@@ -37,10 +37,9 @@ const CreateEmployee = () => {
       });
   }, []);
 
-  
-
   const handleSubmit = () => {
     // Send a POST request to your Django backend to create a new employee
+    console.log(formData);
     axios.post('http://localhost:8000/api/create_employee/', formData)
       .then(response => {
         // Handle success, e.g., show a success message or redirect
@@ -49,6 +48,7 @@ const CreateEmployee = () => {
       .catch(error => {
         // Handle error, e.g., show an error message
         console.error('Error creating employee:', error);
+        console.log('Error response:', error.response);
       });
   };
 
@@ -65,11 +65,11 @@ const CreateEmployee = () => {
             fullWidth
             style={{ color: 'white', borderColor: 'white' }}
             InputProps={{
-                style: { color: 'white', borderColor: 'white' }
-              }}
-              InputLabelProps={{
-                style: { color: 'white' }
-              }}
+              style: { color: 'white', borderColor: 'white' }
+            }}
+            InputLabelProps={{
+              style: { color: 'white' }
+            }}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -81,6 +81,12 @@ const CreateEmployee = () => {
             onChange={handleChange}
             fullWidth
             style={{ color: 'white', borderColor: 'white' }}
+            InputProps={{
+              style: { color: 'white', borderColor: 'white' },
+            }}
+            InputLabelProps={{
+              style: { color: 'white' },
+            }}
           >
             {genderChoices.map((choice) => (
               <MenuItem key={choice[0]} value={choice[0]}>
@@ -97,12 +103,11 @@ const CreateEmployee = () => {
             onChange={handleChange}
             fullWidth
             InputProps={{
-                style: { color: 'white', borderColor: 'white' }
-              }}
-              InputLabelProps={{
-                style: { color: 'white' }
-              }}
-            style={{ color: 'white', borderColor: 'white' }} // Set text color and border color to white
+              style: { color: 'white', borderColor: 'white' }
+            }}
+            InputLabelProps={{
+              style: { color: 'white' }
+            }}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -112,13 +117,13 @@ const CreateEmployee = () => {
             value={formData.dob}
             onChange={handleChange}
             fullWidth
-            style={{ color: 'white', borderColor: 'white' }} // Set text color and border color to white
+            style={{ color: 'white', borderColor: 'white' }}
             InputProps={{
-                style: { color: 'white', borderColor: 'white' }
-              }}
-              InputLabelProps={{
-                style: { color: 'white' }
-              }}
+              style: { color: 'white', borderColor: 'white' }
+            }}
+            InputLabelProps={{
+              style: { color: 'white' }
+            }}
           />
         </Grid>
         <Grid item xs={12}>
@@ -128,58 +133,36 @@ const CreateEmployee = () => {
             value={formData.designation}
             onChange={handleChange}
             fullWidth
-            style={{ color: 'white', borderColor: 'white' }} // Set text color and border color to white
-            InputProps={{
-                style: { color: 'white', borderColor: 'white' }
-              }}
-              InputLabelProps={{
-                style: { color: 'white' }
-              }}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            label="Gender"
-            name="gender"
-            value={formData.gender}
-            onChange={handleChange}
-            fullWidth
-            style={{ color: 'white', borderColor: 'white' }} // Set text color and border color to white
-            InputProps={{
-                style: { color: 'white', borderColor: 'white' }
-              }}
-              InputLabelProps={{
-                style: { color: 'white' }
-              }}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            select
-            label="Language Skills Level"
-            name="languageSkillsLevel"
-            value={formData.languageSkillsLevel}
-            onChange={handleChange}
-            fullWidth
             style={{ color: 'white', borderColor: 'white' }}
             InputProps={{
-                style: { color: 'white', borderColor: 'white' }
-              }}
-              InputLabelProps={{
-                style: { color: 'white' }
-              }}
+              style: { color: 'white', borderColor: 'white' }
+            }}
+            InputLabelProps={{
+              style: { color: 'white' }
+            }}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <InputLabel htmlFor="language-skills">Language Skills</InputLabel>
+          <Select
+            label="Language Skills"
+            name="languageSkills"
+            value={formData.languageSkills}
+            onChange={handleChange}
+            fullWidth
+            multiple
+            style={{ color: 'white', borderColor: 'white' }}
+            
+            
           >
-            {skillLevelChoices.map((choice) => (
-              <MenuItem key={choice[0]} value={choice[0]}>
-                {choice[1]}
+            {languages.map((language) => (
+              <MenuItem key={language[0]} value={language[0]}>
+                {language[1]}
               </MenuItem>
             ))}
-          </TextField>
+          </Select>
         </Grid>
-        {/* Add fields for programmingSkills and languageSkills based on your data structure */}
-        {/* For example, you can use a MultiSelect component for skills */}
-      </Grid>
-      <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={6}>
           <InputLabel htmlFor="programming-skills">Programming Languages</InputLabel>
           <Select
             label="Programming Languages"
@@ -189,12 +172,7 @@ const CreateEmployee = () => {
             fullWidth
             multiple
             style={{ color: 'white', borderColor: 'white' }}
-            InputProps={{
-                style: { color: 'white', borderColor: 'white' }
-              }}
-              InputLabelProps={{
-                style: { color: 'white' }
-              }}
+            
           >
             {programmingLanguages.map((language) => (
               <MenuItem key={language[0]} value={language[0]}>
@@ -203,11 +181,51 @@ const CreateEmployee = () => {
             ))}
           </Select>
         </Grid>
+        <Grid item xs={12} sm={6}>
+          <InputLabel htmlFor="language-skills-level">Language Skills Level</InputLabel>
+          <Select
+            label="Language Skills Level"
+            name="languageSkillsLevel"
+            value={formData.languageSkillsLevel}
+            onChange={handleChange}
+            fullWidth
+            style={{ color: 'white', borderColor: 'white' }}
+            
+          >
+            {skillLevelChoices.map((choice) => (
+              <MenuItem key={choice[0]} value={choice[0]}>
+                {choice[1]}
+              </MenuItem>
+            ))}
+          </Select>
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <InputLabel htmlFor="programming-skills-level">Programming Language Skills Level</InputLabel>
+          <Select
+            label="Programming Language Skills Level"
+            name="programmingSkillsLevel"
+            value={formData.programmingSkillsLevel}
+            onChange={handleChange}
+            fullWidth
+            style={{ color: 'white', borderColor: 'white' }}
+            inputProps={{
+              style: { color: 'white' },
+            }}
+          >
+            {skillLevelChoices.map((choice) => (
+              <MenuItem key={choice[0]} value={choice[0]}>
+                {choice[1]}
+              </MenuItem>
+            ))}
+          </Select>
+        </Grid>
+      </Grid>
+
       <Button
         variant="contained"
         color="primary"
         onClick={handleSubmit}
-        style={{ marginTop: '20px', backgroundColor: 'white', color: 'black' }} // Set background color and text color for the button
+        style={{ marginTop: '20px', backgroundColor: 'white', color: 'black' }}
       >
         Create Employee
       </Button>

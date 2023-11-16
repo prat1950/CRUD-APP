@@ -11,6 +11,10 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.http import HttpResponse
+import json
+from django.core.serializers.json import DjangoJSONEncoder
+from .serializers import EmployeeSerializer
+
 
 # def create_employee(request):
 #     if request.method == 'POST':
@@ -49,6 +53,8 @@ class CreateEmployeeAPIView(APIView):
         form=EmployeeForm(request.data)
         #here I am using request.data instead of request.POST because I am using APIView
         #I am getting the data from the frontend in the form of JSON
+        def serialize_errors(errors):
+            return json.dumps(errors, cls=DjangoJSONEncoder)
         if form.is_valid():
             employee=form.save()
             #so then I want to serialize the data 
@@ -57,9 +63,10 @@ class CreateEmployeeAPIView(APIView):
             return JsonResponse({'data': serialized_data})
             #I am returning the serialized data as a JSON response
         else:
-            return JsonResponse({'error': 'Invalid form data'}, status=400)
-            #If the form is invalid, I am returning the form errors as a JSON response
+            return JsonResponse({'error': 'Invalid form data', 'errors': serialize_errors(form.errors)}, status=400)            #If the form is invalid, I am returning the form errors as a JSON response
 
+        
+        
 class EmployeeListAPIView(APIView):
     def get(self, request):
         employees = Employee.objects.all()
