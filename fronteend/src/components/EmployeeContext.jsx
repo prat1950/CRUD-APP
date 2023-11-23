@@ -1,6 +1,7 @@
 // EmployeeContext.js
 
 import { createContext, useContext, useState } from 'react';
+import axios from 'axios';
 
 const EmployeeContext = createContext();
 
@@ -13,14 +14,31 @@ export const EmployeeProvider = ({ children }) => {
   };
 
   const update = (updatedEmployee) => {
+    // Extract relevant fields from updatedEmployee
+    const { fields } = updatedEmployee;
+    console.log('Payload:', fields);
+  
+    // Send a PUT request to update the employee on the server
+    axios.put(`http://localhost:8000/api/employee_update/${fields.employee_id}/`, fields)
+      .then(response => {
+        console.log('Employee updated on the server:', response.data);
+      })
+      .catch(error => {
+        console.error('Error updating employee:', error);
+      });
+  
+    // Update the local state
     setEmployees((prevEmployees) =>
       prevEmployees.map((employee) =>
-        employee.fields.employee_id === updatedEmployee.fields.employee_id
+        employee.fields.employee_id === fields.employee_id
           ? updatedEmployee
           : employee
       )
     );
   };
+  
+  
+  
 
   const deleteEmployee = (employeeId) => {
     setEmployees((prevEmployees) =>
@@ -29,7 +47,7 @@ export const EmployeeProvider = ({ children }) => {
   };
 
   return (
-    <EmployeeContext.Provider value={{ emp, updateEmployees }}>
+    <EmployeeContext.Provider value={{ emp, updateEmployees, update, deleteEmployee }}>
       {children}
     </EmployeeContext.Provider>
   );

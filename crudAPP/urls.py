@@ -33,7 +33,7 @@ urlpatterns = [
     # path('employees/<int:pk>/update/', views.employee_update, name='employee_update'),
     path('api/create_employee/', CreateEmployeeAPIView.as_view(), name='create_employee_api'),
     path('api/employee_list/', EmployeeListAPIView.as_view(), name='employee_list_api'),
-    path('api/employee_delete/<int:pk>/', EmployeeDeleteAPIView.as_view(), name='employee_delete_api'),
-    path('api/employee_update/<int:pk>/', EmployeeUpdateAPIView.as_view(), name='employee_update_api'),
+    path('api/employee_delete/<str:employee_id>/', EmployeeDeleteAPIView.as_view(), name='employee_delete_api'),
+    path('api/employee_update/<str:employee_id>/', EmployeeUpdateAPIView.as_view(), name='employee_update_api'),
     path('api/choices/', views.choices, name='choices'),
 ]

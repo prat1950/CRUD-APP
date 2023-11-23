@@ -14,6 +14,8 @@ from django.http import HttpResponse
 import json
 from django.core.serializers.json import DjangoJSONEncoder
 from .serializers import EmployeeSerializer
+from .forms import EmployeeUpdateForm
+
 
 
 # def create_employee(request):
@@ -93,21 +95,24 @@ class EmployeeListAPIView(APIView):
 
 
 class EmployeeDeleteAPIView(APIView):
-    def delete(self, request, pk):
-        employee = get_object_or_404(Employee, pk=pk)
+    def delete(self, request, employee_id):
+        print(f"Deleting employee with ID: {employee_id}")
+        employee = get_object_or_404(Employee, employee_id=employee_id)
         employee.delete()
         return JsonResponse({'message': 'Employee deleted successfully'})
 
 class EmployeeUpdateAPIView(APIView):
-    def put(self, request, pk):
-        employee = get_object_or_404(Employee, pk=pk)
-        form = EmployeeForm(request.data, instance=employee)
+    def put(self, request, employee_id):
+        employee = get_object_or_404(Employee, employee_id=employee_id)
+        form = EmployeeUpdateForm(request.data, instance=employee)
         if form.is_valid():
             employee = form.save()
             serialized_data = serializers.serialize('json', [employee])
             return JsonResponse({'data': serialized_data})
         else:
+            print(f"Form errors: {form.errors}")
             return JsonResponse({'error': 'Invalid form data'}, status=400)
+
 
 def index(request):
     return HttpResponse("Hello, this is the root path.")

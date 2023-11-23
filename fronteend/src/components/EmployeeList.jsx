@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Grid, Card, CardContent, ListItem, ListItemIcon, ListItemText } from '@mui/material';
+import { Grid, Card, CardContent, ListItem, ListItemIcon, ListItemText, Button } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
 import CakeIcon from '@mui/icons-material/Cake';
 import WorkIcon from '@mui/icons-material/Work';
@@ -9,20 +9,15 @@ import CodeIcon from '@mui/icons-material/Code';
 import LanguageIcon from '@mui/icons-material/Language';
 import { useEmployeeContext } from './EmployeeContext';
 
-
 const EmployeeList = () => {
   const [employees, setEmployees] = useState([]);
   const [choices, setChoices] = useState({});
   const [fetchDataFlag, setFetchDataFlag] = useState(true);
 
-  const {emp}=useEmployeeContext();
-  
+  const { emp, update, deleteEmployee } = useEmployeeContext();
 
   useEffect(() => {
-    
-      fetchData();
-      
-    
+    fetchData();
   }, [emp]);
 
   const fetchData = () => {
@@ -31,11 +26,35 @@ const EmployeeList = () => {
         const decodedData = JSON.parse(response.data.data);
         setEmployees(decodedData);
         setChoices(response.data.choices);
+        console.log('Decoded Data:', decodedData);
+        console.log('Choices:', response.data.choices);
       })
       .catch(error => console.error(error));
   };
 
-  
+  const handleUpdate = (employee) => {
+    // This function should be used in the CreateEmployee component to pre-fill the form with existing data
+    update(employee);
+    // Now you can navigate to the CreateEmployee component or open a modal for editing
+    
+    
+  };
+
+  const handleDelete = (employeeId) => {
+    //deleting by ID
+    deleteEmployee(employeeId);
+
+    //sends a delete call 
+    axios.delete(`http://localhost:8000/api/employee_delete/${employeeId}`)
+      .then(response => {
+        console.log('Employee deleted successfully:', response.data);
+        // Trigger a refetch of the data after deletion
+        fetchData();
+      })
+      .catch(error => {
+        console.error('Error deleting employee:', error);
+      });
+  };
 
   return (
     <Grid container spacing={2}>
@@ -79,6 +98,12 @@ const EmployeeList = () => {
                 </ListItemIcon>
                 <ListItemText primary={`Language Skills: ${employee.fields.language_skills.join(', ')}`} />
               </ListItem>
+              <Button variant="outlined" color="primary" onClick={() => handleUpdate(employee)}>
+                Update
+              </Button>
+              <Button variant="outlined" color="secondary" onClick={() => handleDelete(employee.fields.employee_id)}>
+                Delete
+              </Button>
             </CardContent>
           </Card>
         </Grid>
