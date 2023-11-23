@@ -7,21 +7,23 @@ import WorkIcon from '@mui/icons-material/Work';
 import WcIcon from '@mui/icons-material/Wc';
 import CodeIcon from '@mui/icons-material/Code';
 import LanguageIcon from '@mui/icons-material/Language';
+import { useEmployeeContext } from './EmployeeContext';
+
 
 const EmployeeList = () => {
   const [employees, setEmployees] = useState([]);
   const [choices, setChoices] = useState({});
   const [fetchDataFlag, setFetchDataFlag] = useState(true);
 
-
+  const {emp}=useEmployeeContext();
   
 
   useEffect(() => {
-    if (fetchDataFlag) {
+    
       fetchData();
-      setFetchDataFlag(false);
-    }
-  }, [fetchDataFlag]);
+      
+    
+  }, [emp]);
 
   const fetchData = () => {
     axios.get('http://localhost:8000/api/employee_list/')

@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Button, TextField, Container, Grid, MenuItem, Select, InputLabel } from '@mui/material';
+import { useEmployeeContext } from './EmployeeContext';
 
 const CreateEmployee = () => {
+
+  const {updateEmployees}=useEmployeeContext();
+
   const [formData, setFormData] = useState({
     employee_id: '',
     employee_code: '',
@@ -60,6 +64,8 @@ const CreateEmployee = () => {
       .then(response => {
         // Handle success, e.g., show a success message or redirect
         console.log('Employee created successfully:', response.data);
+        const newEmployeeData = JSON.parse(response.data.data); // Parse the data
+        updateEmployees(newEmployeeData);
       })
       .catch(error => {
         // Handle error, e.g., show an error message
