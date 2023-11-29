@@ -63,7 +63,7 @@ const EmployeeList = () => {
   return (
     <Grid container spacing={2} style={{ overflowY: 'auto', maxHeight: 'calc(100vh - 64px)' }}>
       {employees.map(employee => (
-        <Grid item key={employee.fields.employee_id} xs={12} sm={6} md={4} lg={3}>
+        <Grid item key={employee.fields.employee_id} xs={12} sm={6} md={4} lg={6}>
           <Card variant="outlined" style={{ marginBottom: '10px' }}>
             <CardContent>
               <ListItem>
@@ -106,7 +106,7 @@ const EmployeeList = () => {
                 <ListItemIcon>
                   <LanguageIcon />
                 </ListItemIcon>
-                <ListItemText primary={`Language Skills: ${employee.fields.language_skills.join(', ')}`} />
+                <ListItemText primary={`Language Skills: ${employee.fields.language_skills}`} />
               </ListItem>
               <ListItem>
               <ListItemIcon>

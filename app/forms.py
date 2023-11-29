@@ -1,6 +1,5 @@
 from django import forms
-from .models import Employee, ProgrammingLanguage, Language
-
+from .models import Employee, ProgrammingLanguage, Language, SKILL_LEVEL_CHOICES
 
 class EmployeeForm(forms.ModelForm):
     class Meta:
@@ -17,9 +16,9 @@ class EmployeeForm(forms.ModelForm):
     )
 
     programming_skills_level = forms.ChoiceField(
-        choices=Employee.SKILL_LEVEL_CHOICES,
+        choices=SKILL_LEVEL_CHOICES,
         required=False,
-        initial=Employee.BASIC
+        
     )
 
     language_skills = forms.ModelMultipleChoiceField(
@@ -29,17 +28,17 @@ class EmployeeForm(forms.ModelForm):
     )
 
     language_skills_level = forms.ChoiceField(
-        choices=Employee.SKILL_LEVEL_CHOICES,
+        choices=SKILL_LEVEL_CHOICES,
         required=False,
-        initial=Employee.BASIC
+        
     )
 
 
-#form for updating:
+# Form for updating:
 
 class EmployeeUpdateForm(forms.ModelForm):
     class Meta:
-        model=Employee
+        model = Employee
         fields = '__all__'
         widgets = {
             'dob': forms.DateInput(attrs={'type': 'date'}),

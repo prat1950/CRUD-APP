@@ -17,6 +17,7 @@ const CreateEmployee = () => {
     gender: '',
     language_skills_level: '',
     programming_skills: [],
+    programming_skills_level:'',
     language_skills: [],
   });
   const [genderChoices, setGenderChoices] = useState([]);
@@ -54,19 +55,42 @@ const CreateEmployee = () => {
   }, []);
 
   const handleSubmit = () => {
-    // Send a POST request to your Django backend to create a new employee
-    console.log(formData);
+    // Convert programming_skills and language_skills to arrays
+    const programmingSkillsArray = formData.programming_skills;
+    const languageSkillsArray = formData.language_skills;
   
-
-    axios.post('http://localhost:8000/api/create_employee/', formData, {
+    // Create a FormData object
+    const formDataObject = new FormData();
+  
+    // Append each field to the FormData object
+    formDataObject.append('employee_id', formData.employee_id);
+    formDataObject.append('employee_code', formData.employee_code);
+    formDataObject.append('dob', formData.dob);
+    formDataObject.append('designation', formData.designation);
+    formDataObject.append('gender', formData.gender);
+  
+    // Append arrays directly to FormData
+    programmingSkillsArray.forEach((language) => {
+      formDataObject.append('programming_skills', language);
+    });
+  
+    languageSkillsArray.forEach((programmingLanguage) => {
+      formDataObject.append('language_skills', programmingLanguage);
+    });
+  
+    formDataObject.append('programming_skills_level', formData.programming_skills_level);
+    formDataObject.append('language_skills_level', formData.language_skills_level);
+  
+    // Send a POST request to your Django backend to create a new employee
+    axios.post('http://localhost:8000/api/create_employee/', formDataObject, {
       headers: {
-        'Content-Type': 'multipart/form-data'
+        'Content-Type': 'multipart/form-data',
       }
     })
       .then(response => {
         // Handle success, e.g., show a success message or redirect
         console.log('Employee created successfully:', response.data);
-        const newEmployeeData = JSON.parse(response.data.data); // Parse the data
+        const newEmployeeData = response.data.data;
         updateEmployees(newEmployeeData);
       })
       .catch(error => {
@@ -74,20 +98,16 @@ const CreateEmployee = () => {
         console.error('Error creating employee:', error);
         console.log('Error response:', error.response.data);
         console.log(error.response.status);
-    console.log(error.response.headers);
+        console.log(error.response.headers);
       });
   };
   
+  
 
-  // const Select = styled('select')({
-  //   '&:before': {
-  //     borderColor: 'white',
-  //   },
-  //   '&:after': {
-  //     borderColor: 'white',
-  //   },
-  // });
-  //to style the select 
+
+  
+
+   
 
   return (
     <Container>
