@@ -8,6 +8,10 @@ import WcIcon from '@mui/icons-material/Wc';
 import CodeIcon from '@mui/icons-material/Code';
 import LanguageIcon from '@mui/icons-material/Language';
 import { useEmployeeContext } from './EmployeeContext';
+import AccessTimeIcon from '@mui/icons-material/AccessTime'; // You can replace this with an appropriate icon for programming language skills level
+import LanguageLevelIcon from '@mui/icons-material/Language';
+import TranslateIcon from '@mui/icons-material/Translate';
+import FilterListIcon from '@mui/icons-material/FilterList';
 
 const EmployeeList = () => {
   const [employees, setEmployees] = useState([]);
@@ -57,7 +61,7 @@ const EmployeeList = () => {
   };
 
   return (
-    <Grid container spacing={2}>
+    <Grid container spacing={2} style={{ overflowY: 'auto', maxHeight: 'calc(100vh - 64px)' }}>
       {employees.map(employee => (
         <Grid item key={employee.fields.employee_id} xs={12} sm={6} md={4} lg={3}>
           <Card variant="outlined" style={{ marginBottom: '10px' }}>
@@ -93,10 +97,22 @@ const EmployeeList = () => {
                 <ListItemText primary={`Programming Skills: ${employee.fields.programming_skills.join(', ')}`} />
               </ListItem>
               <ListItem>
+              <ListItemIcon>
+              <FilterListIcon />
+                </ListItemIcon>
+                <ListItemText primary={`Programming Language Skills Level: ${employee.fields.programming_skills_level}`} />
+              </ListItem>
+              <ListItem>
                 <ListItemIcon>
                   <LanguageIcon />
                 </ListItemIcon>
                 <ListItemText primary={`Language Skills: ${employee.fields.language_skills.join(', ')}`} />
+              </ListItem>
+              <ListItem>
+              <ListItemIcon>
+                  <TranslateIcon />
+                </ListItemIcon>
+                <ListItemText primary={`Language Skills Level: ${employee.fields.language_skills_level}`} />
               </ListItem>
               <Button variant="outlined" color="primary" onClick={() => handleUpdate(employee)}>
                 Update

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Button, TextField, Container, Grid, MenuItem, Select, InputLabel } from '@mui/material';
 import { useEmployeeContext } from './EmployeeContext';
+import {styled} from '@mui/system';
+
 
 const CreateEmployee = () => {
 
@@ -77,6 +79,16 @@ const CreateEmployee = () => {
   };
   
 
+  // const Select = styled('select')({
+  //   '&:before': {
+  //     borderColor: 'white',
+  //   },
+  //   '&:after': {
+  //     borderColor: 'white',
+  //   },
+  // });
+  //to style the select 
+
   return (
     <Container>
       <h1>Create Employee</h1>
@@ -95,6 +107,11 @@ const CreateEmployee = () => {
             InputLabelProps={{
               style: { color: 'white' }
             }}
+            sx={{
+              '& .MuiOutlinedInput-notchedOutline': {
+                borderColor: 'white',
+              },
+            }}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -111,6 +128,11 @@ const CreateEmployee = () => {
             }}
             InputLabelProps={{
               style: { color: 'white' },
+            }}
+            sx={{
+              '& .MuiOutlinedInput-notchedOutline': {
+                borderColor: 'white',
+              },
             }}
           >
             {genderChoices.map((choice) => (
@@ -133,6 +155,11 @@ const CreateEmployee = () => {
             InputLabelProps={{
               style: { color: 'white' }
             }}
+            sx={{
+              '& .MuiOutlinedInput-notchedOutline': {
+                borderColor: 'white',
+              },
+            }}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -148,6 +175,11 @@ const CreateEmployee = () => {
             }}
             InputLabelProps={{
               style: { color: 'white' }
+            }}
+            sx={{
+              '& .MuiOutlinedInput-notchedOutline': {
+                borderColor: 'white',
+              },
             }}
           />
         </Grid>
@@ -165,10 +197,15 @@ const CreateEmployee = () => {
             InputLabelProps={{
               style: { color: 'white' }
             }}
+            sx={{
+              '& .MuiOutlinedInput-notchedOutline': {
+                borderColor: 'white',
+              },
+            }}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
-          <InputLabel htmlFor="language-skills">Language Skills</InputLabel>
+          <InputLabel htmlFor="language-skills" style={{color:'white'}}>Language Skills</InputLabel>
           <Select
             label="Language Skills"
             name="language_skills"
@@ -177,6 +214,11 @@ const CreateEmployee = () => {
             fullWidth
             multiple
             style={{ color: 'white', borderColor: 'white' }}
+            sx={{
+              '& .MuiOutlinedInput-notchedOutline': {
+                borderColor: 'white',
+              },
+            }}
             
             
           >
@@ -188,7 +230,7 @@ const CreateEmployee = () => {
           </Select>
         </Grid>
         <Grid item xs={12} sm={6}>
-          <InputLabel htmlFor="programming-skills">Programming Languages</InputLabel>
+          <InputLabel htmlFor="programming-skills" style={{color:'white'}}>Programming Languages</InputLabel>
           <Select
             label="Programming Languages"
             name="programming_skills"
@@ -197,6 +239,11 @@ const CreateEmployee = () => {
             fullWidth
             multiple
             style={{ color: 'white', borderColor: 'white' }}
+            sx={{
+              '& .MuiOutlinedInput-notchedOutline': {
+                borderColor: 'white',
+              },
+            }}
             
           >
             {programmingLanguages.map((language) => (
@@ -207,14 +254,19 @@ const CreateEmployee = () => {
           </Select>
         </Grid>
         <Grid item xs={12} sm={6}>
-          <InputLabel htmlFor="language-skills-level">Language Skills Level</InputLabel>
+          <InputLabel htmlFor="language-skills-level" style={{color:'white'}}>Language Skills Level</InputLabel>
           <Select
             label="Language Skills Level"
-            name="language_skills_Level"
+            name="language_skills_level"
             value={formData.language_skills_level}
             onChange={handleChange}
             fullWidth
             style={{ color: 'white', borderColor: 'white' }}
+            sx={{
+              '& .MuiOutlinedInput-notchedOutline': {
+                borderColor: 'white',
+              },
+            }}
             
           >
             {skillLevelChoices.map((choice) => (
@@ -225,7 +277,7 @@ const CreateEmployee = () => {
           </Select>
         </Grid>
         <Grid item xs={12} sm={6}>
-          <InputLabel htmlFor="programming-skills-level">Programming Language Skills Level</InputLabel>
+          <InputLabel htmlFor="programming-skills-level" style={{color:'white'}}>Programming Language Skills Level</InputLabel>
           <Select
             label="Programming Language Skills Level"
             name="programming_skills_level"
@@ -233,9 +285,13 @@ const CreateEmployee = () => {
             onChange={handleChange}
             fullWidth
             style={{ color: 'white', borderColor: 'white' }}
-            inputProps={{
-              style: { color: 'white' },
+            sx={{
+              '& .MuiOutlinedInput-notchedOutline': {
+                borderColor: 'white',
+              },
             }}
+            
+            
           >
             {skillLevelChoices.map((choice) => (
               <MenuItem key={choice[0]} value={choice[0]}>
