@@ -12,7 +12,8 @@ class EmployeeForm(forms.ModelForm):
     programming_skills = forms.ModelMultipleChoiceField(
         queryset=ProgrammingLanguage.objects.all(),
         widget=forms.CheckboxSelectMultiple,
-        required=False
+        required=False,
+        to_field_name='name',
     )
 
     programming_skills_level = forms.ChoiceField(
@@ -25,6 +26,7 @@ class EmployeeForm(forms.ModelForm):
         queryset=Language.objects.all(),
         widget=forms.CheckboxSelectMultiple,
         required=False,
+        to_field_name='name',
     )
 
     language_skills_level = forms.ChoiceField(

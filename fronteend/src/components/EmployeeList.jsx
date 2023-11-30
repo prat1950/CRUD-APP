@@ -14,24 +14,14 @@ import TranslateIcon from '@mui/icons-material/Translate';
 import FilterListIcon from '@mui/icons-material/FilterList';
 
 
-const PROGRAMMING_LANGUAGES = {
-  '1': 'Python',
-  '2': 'C#',
-  '3': 'PHP',
-};
 
-const LANGUAGES = {
-  '1': 'Telugu',
-  '2': 'Tamil',
-  '3': 'English',
-};
 
 const EmployeeList = () => {
   const [employees, setEmployees] = useState([]);
   const [choices, setChoices] = useState({});
-  const [fetchDataFlag, setFetchDataFlag] = useState(true);
 
   const { emp, update, deleteEmployee } = useEmployeeContext();
+
 
   useEffect(() => {
     fetchData();
@@ -41,10 +31,14 @@ const EmployeeList = () => {
     axios.get('http://localhost:8000/api/employee_list/')
       .then(response => {
         const decodedData = JSON.parse(response.data.data);
+        console.log(response);
+        
         setEmployees(decodedData);
         setChoices(response.data.choices);
         console.log('Decoded Data:', decodedData);
-        console.log('Choices:', response.data.choices);
+        console.log('Choices:', choices);
+        
+
       })
       .catch(error => console.error(error));
   };
@@ -107,7 +101,9 @@ const EmployeeList = () => {
                 <ListItemIcon>
                   <CodeIcon />
                 </ListItemIcon>
-                <ListItemText primary={`Programming Skills: ${employee.fields.programming_skills.map(id => PROGRAMMING_LANGUAGES[id]).join(', ')}`} />
+                <ListItemText
+    primary={`Programming Skills: ${employee.fields.programming_skills.map(id => choices.programming_languages[id] )}`}
+  />
               </ListItem>
               <ListItem>
               <ListItemIcon>
@@ -119,7 +115,7 @@ const EmployeeList = () => {
                 <ListItemIcon>
                   <LanguageIcon />
                 </ListItemIcon>
-                <ListItemText primary={`Language Skills: ${employee.fields.language_skills.map(id => LANGUAGES[id]).join(', ')}`} />
+                <ListItemText primary={`Language Skills: ${employee.fields.language_skills.map(id => choices.languages[id])}`} />
               </ListItem>
               <ListItem>
               <ListItemIcon>
@@ -127,6 +123,7 @@ const EmployeeList = () => {
                 </ListItemIcon>
                 <ListItemText primary={`Language Skills Level: ${employee.fields.language_skills_level}`} />
               </ListItem>
+              <div style={{ marginBottom: '10px' }}></div>
               <Button variant="outlined" color="primary" onClick={() => handleUpdate(employee)}>
                 Update
               </Button>

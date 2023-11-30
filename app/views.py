@@ -25,16 +25,18 @@ class CreateEmployeeAPIView(APIView):
     def post(self, request):
         # Convert programming_skills names to corresponding primary keys
         programming_skills_names = request.data.getlist('programming_skills', [])
-        programming_skills = [ProgrammingLanguage.objects.get(id=skill_id) for skill_id in programming_skills_names]
+        programming_skills = ProgrammingLanguage.objects.filter(name__in=programming_skills_names)
+        program=[programming.name for programming in programming_skills]
 
         language_skills_names = request.data.getlist('language_skills', [])
-        language_skills = Language.objects.filter(id__in=language_skills_names)
+        language_skills = Language.objects.filter(name__in=language_skills_names)
+        language=[language.name for language in language_skills]
 
-        print(language_skills_names)
+        
 
         # Check if all programming_skills and language_skills are valid
      
-        print(language_skills_names)
+        
         # Create a dictionary containing the cleaned data
         cleaned_data = {
             'employee_id': request.data.get('employee_id', ''),
@@ -42,14 +44,14 @@ class CreateEmployeeAPIView(APIView):
             'dob': request.data.get('dob', ''),
             'designation': request.data.get('designation', ''),
             'gender': request.data.get('gender', ''),
-            'programming_skills': programming_skills,
+            'programming_skills': program,
             'programming_skills_level': request.data.get('programming_skills_level', ''),
-            'language_skills': language_skills,
+            'language_skills': language,
             'language_skills_level': request.data.get('language_skills_level', ''),
         }
-        print(language_skills_names)
+        
         form = EmployeeForm(cleaned_data)
-        print(language_skills_names)
+        
         if form.is_valid():
             
             employee = form.save()
@@ -62,9 +64,9 @@ class CreateEmployeeAPIView(APIView):
                 'dob': str(employee.dob),
                 'designation': employee.designation,
                 'gender': employee.gender,
-                'programming_skills': [skill.name for skill in programming_skills],
+                'programming_skills': program,
                 'programming_skills_level': employee.programming_skills_level,
-                'language_skills': [Language.objects.get(id=language_id).name for language_id in language_skills_names],
+                'language_skills': language,
                 'language_skills_level': employee.language_skills_level,
             }
 
@@ -83,8 +85,9 @@ class EmployeeListAPIView(APIView):
 
         # Retrieve choices directly from the Employee model
         gender_choices = dict(GENDER_CHOICES)
-        programming_languages = list(dict(PROGRAMMING_LANGUAGES).keys())
-        languages = list(dict(LANGUAGES).keys())
+        programming_languages = dict(PROGRAMMING_LANGUAGES)
+         
+        languages = dict(LANGUAGES)
         skill_level_choices = dict(SKILL_LEVEL_CHOICES)
 
         # Add choices to the response data
