@@ -17,15 +17,15 @@ GENDER_CHOICES = [
 ]
 
 PROGRAMMING_LANGUAGES = [
-    ('Python', 'Python'),
-    ('C#', 'C#'),
-    ('PHP', 'PHP'),
+    ('1', 'Python'),
+    ('2', 'C#'),
+    ('3', 'PHP'),
 ]
 
 LANGUAGES = [
-    ('Telugu', 'Telugu'),
-    ('Tamil', 'Tamil'),
-    ('English', 'English'),
+    ('1', 'Telugu'),
+    ('2', 'Tamil'),
+    ('3', 'English'),
 ]
 
 class ProgrammingLanguage(models.Model):
@@ -53,3 +53,13 @@ class Employee(models.Model):
 
     def __str__(self):
         return f'Employee {self.employee_id}'
+
+# class ProgrammingSkill(models.Model):
+#     employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+#     programming_language = models.ForeignKey(ProgrammingLanguage, on_delete=models.CASCADE)
+#     # Add other fields as needed
+
+# class LanguageSkill(models.Model):
+#     employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+#     language = models.ForeignKey(Language, on_delete=models.CASCADE)
+#     # Add other fields as needed

@@ -13,6 +13,19 @@ import LanguageLevelIcon from '@mui/icons-material/Language';
 import TranslateIcon from '@mui/icons-material/Translate';
 import FilterListIcon from '@mui/icons-material/FilterList';
 
+
+const PROGRAMMING_LANGUAGES = {
+  '1': 'Python',
+  '2': 'C#',
+  '3': 'PHP',
+};
+
+const LANGUAGES = {
+  '1': 'Telugu',
+  '2': 'Tamil',
+  '3': 'English',
+};
+
 const EmployeeList = () => {
   const [employees, setEmployees] = useState([]);
   const [choices, setChoices] = useState({});
@@ -94,7 +107,7 @@ const EmployeeList = () => {
                 <ListItemIcon>
                   <CodeIcon />
                 </ListItemIcon>
-                <ListItemText primary={`Programming Skills: ${employee.fields.programming_skills.join(', ')}`} />
+                <ListItemText primary={`Programming Skills: ${employee.fields.programming_skills.map(id => PROGRAMMING_LANGUAGES[id]).join(', ')}`} />
               </ListItem>
               <ListItem>
               <ListItemIcon>
@@ -106,7 +119,7 @@ const EmployeeList = () => {
                 <ListItemIcon>
                   <LanguageIcon />
                 </ListItemIcon>
-                <ListItemText primary={`Language Skills: ${employee.fields.language_skills}`} />
+                <ListItemText primary={`Language Skills: ${employee.fields.language_skills.map(id => LANGUAGES[id]).join(', ')}`} />
               </ListItem>
               <ListItem>
               <ListItemIcon>
