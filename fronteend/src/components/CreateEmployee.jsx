@@ -48,6 +48,13 @@ const CreateEmployee = () => {
   };
   
   
+  const resetForm = () => {
+    setFormData((prevData) => ({
+      ...prevData,
+      programming_skills: [],
+      language_skills: [],
+    }));
+  };
   
   
   
@@ -377,6 +384,15 @@ const CreateEmployee = () => {
         style={{ marginTop: '20px', backgroundColor: 'white', color: 'black' }}
       >
         {buttonLabel}
+      </Button>
+
+      <Button
+        variant="contained"
+        color="secondary"
+        onClick={resetForm}
+        style={{ marginTop: '20px', marginLeft: '10px', backgroundColor: 'white', color: 'black' }}
+      >
+        Reset Languages
       </Button>
     </Container>
   );
