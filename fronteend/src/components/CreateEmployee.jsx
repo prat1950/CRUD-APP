@@ -7,7 +7,7 @@ import {styled} from '@mui/system';
 
 const CreateEmployee = () => {
 
-  const {updateEmployees}=useEmployeeContext();
+  const {register, setForm, reset, updateEmployees, selectedEmployee, update}=useEmployeeContext();
 
   const [formData, setFormData] = useState({
     employee_id: '',
@@ -24,21 +24,34 @@ const CreateEmployee = () => {
   const [programmingLanguages, setProgrammingLanguages] = useState([]);
   const [languages, setLanguages] = useState([]);
   const [skillLevelChoices, setSkillLevelChoices] = useState([]);
+  const [isUpdate, setIsUpdate] = useState(false);
+
 
   const handleChange = (event) => {
     const { name, value } = event.target;
   
-    // Check if the field is programming_skills or language_skills
     if (name === "programming_skills" || name === "language_skills") {
       // Convert the value to an array
       const updatedValue = Array.isArray(value) ? value : [value];
-      // Update the formData state with the array value
-      setFormData({ ...formData, [name]: updatedValue });
+  
+      // Update the formData state with the array value or an empty array for deselection
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: prevData[name].includes(value)
+          ? prevData[name].filter((item) => item !== value) // Deselect the value
+          : [...prevData[name], ...updatedValue], // Select the value
+      }));
     } else {
       // For other fields, update the formData state normally
       setFormData({ ...formData, [name]: value });
     }
   };
+  
+  
+  
+  
+  
+  
 
   useEffect(() => {
     // Fetch choices from Django backend
@@ -53,6 +66,28 @@ const CreateEmployee = () => {
         console.error('Error fetching choices:', error);
       });
   }, []);
+
+  useEffect(() => {
+    // Check if there is a selected employee for updating
+    if (selectedEmployee) {
+      // Set form values for updating
+      setIsUpdate(true);
+      //this is to change the form's looks
+     
+      setFormData({
+        employee_id: selectedEmployee.fields.employee_id,
+        employee_code: selectedEmployee.fields.employee_code,
+        dob: selectedEmployee.fields.dob,
+        designation: selectedEmployee.fields.designation,
+        gender: selectedEmployee.fields.gender,
+        programming_skills: selectedEmployee.fields.programming_skills || [],
+        language_skills: selectedEmployee.fields.language_skills || [],
+        programming_skills_level: selectedEmployee.fields.programming_skills_level || '',
+        language_skills_level: selectedEmployee.fields.language_skills_level || '',
+      });
+      console.log("updated");
+    }
+  }, [selectedEmployee]);
 
   const handleSubmit = () => {
     // Convert programming_skills and language_skills to arrays
@@ -80,29 +115,42 @@ const CreateEmployee = () => {
   
     formDataObject.append('programming_skills_level', formData.programming_skills_level);
     formDataObject.append('language_skills_level', formData.language_skills_level);
-  
-    // Send a POST request to your Django backend to create a new employee
-    axios.post('http://localhost:8000/api/create_employee/', formDataObject, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      }
-    })
-      .then(response => {
-        // Handle success, e.g., show a success message or redirect
-        console.log('Employee created successfully:', response.data);
-        const newEmployeeData = response.data.data;
-        updateEmployees(newEmployeeData);
+    
+    if (isUpdate) {
+      // Call the update function from the context
+      update({fields:formData});
+      reset(); // Reset the form
+    }
+
+    else{
+      axios.post('http://localhost:8000/api/create_employee/', formDataObject, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        }
       })
-      .catch(error => {
-        // Handle error, e.g., show an error message
-        console.error('Error creating employee:', error);
-        console.log('Error response:', error.response.data);
-        console.log(error.response.status);
-        console.log(error.response.headers);
-      });
+        .then(response => {
+          // Handle success, e.g., show a success message or redirect
+          console.log('Employee created successfully:', response.data);
+          const newEmployeeData = response.data.data;
+          updateEmployees(newEmployeeData);
+          reset();
+        })
+        .catch(error => {
+          // Handle error, e.g., show an error message
+          console.error('Error creating employee:', error);
+          console.log('Error response:', error.response.data);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+        });
+        // Send a POST request to your Django backend to create a new employee
+
+    }
+    
+   
   };
   
   
+  const buttonLabel = isUpdate ? 'Update Employee' : 'Create Employee';
 
 
   
@@ -111,7 +159,7 @@ const CreateEmployee = () => {
 
   return (
     <Container>
-      <h1>Create Employee</h1>
+      <h1>{buttonLabel}</h1>
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6}>
           <TextField
@@ -328,7 +376,7 @@ const CreateEmployee = () => {
         onClick={handleSubmit}
         style={{ marginTop: '20px', backgroundColor: 'white', color: 'black' }}
       >
-        Create Employee
+        {buttonLabel}
       </Button>
     </Container>
   );

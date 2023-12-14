@@ -12,6 +12,8 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime'; // You can replace 
 import LanguageLevelIcon from '@mui/icons-material/Language';
 import TranslateIcon from '@mui/icons-material/Translate';
 import FilterListIcon from '@mui/icons-material/FilterList';
+import ReactDOM from 'react-dom';
+
 
 
 
@@ -20,7 +22,7 @@ const EmployeeList = () => {
   const [employees, setEmployees] = useState([]);
   const [choices, setChoices] = useState({});
 
-  const { emp, update, deleteEmployee } = useEmployeeContext();
+  const { emp, update, deleteEmployee, setSelectedEmployee, selectedEmployee } = useEmployeeContext();
 
 
   useEffect(() => {
@@ -45,11 +47,28 @@ const EmployeeList = () => {
 
   const handleUpdate = (employee) => {
     // This function should be used in the CreateEmployee component to pre-fill the form with existing data
-    update(employee);
+    console.log('Before setSelectedEmployee:', selectedEmployee);
+
+    // Set the selected employee and update directly
+    setSelectedEmployee(employee);
+    
     // Now you can navigate to the CreateEmployee component or open a modal for editing
+
+    //this checks whether the fields are empty or not 
     
     
+
   };
+
+  useEffect(() => {
+    // Check if there is a selected employee for updating
+    if (selectedEmployee) {
+      console.log('After setSelectedEmployee:', selectedEmployee);
+      update(selectedEmployee);
+      // Now you can navigate to the CreateEmployee component or open a modal for editing
+      // This checks whether the fields are empty or not
+    }
+  }, [selectedEmployee]);
 
   const handleDelete = (employeeId) => {
     //deleting by ID
